@@ -1,0 +1,10 @@
+.candle-chart {
+  border: 1px solid black;
+}
+
+.left-axis-line,
+.bottom-axis-line {
+  stroke: #222;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
