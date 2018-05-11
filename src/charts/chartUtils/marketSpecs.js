@@ -18,7 +18,7 @@ export const getYScale = (
   domainLow: number,
   domainHigh: number,
   rangeStart: number
-): (() => number) =>
+): (number => number) =>
   scaleLinear()
     .domain([domainLow, domainHigh])
     .range([rangeStart, 0]);
@@ -28,8 +28,17 @@ export const getXScale = (
   rangeStart: number,
   rangeStop: number,
   padding: number
-): (() => number) =>
+): (number => number) =>
   scaleBand()
-    .domain(market)
+    .domain(market.map((d, i) => i))
     .range([rangeStart, rangeStop])
-    .padding(0.05);
+    .padding(padding);
+
+export const getYScaleInv = (
+  rangeLow: number,
+  rangeHigh: number,
+  height: number
+): (number => number) =>
+  scaleLinear()
+    .domain([0, height])
+    .range([rangeHigh, rangeLow]);

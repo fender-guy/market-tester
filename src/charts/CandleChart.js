@@ -6,7 +6,8 @@ import {
   getHigh,
   getLow,
   getYScale,
-  getXScale
+  getXScale,
+  getYScaleInv
 } from './chartUtils/marketSpecs';
 
 type Props = {
@@ -22,26 +23,31 @@ export const CandleChart = (props: Props) => {
   const {
     width = 1024,
     height = 800,
-    marginLeft = 10,
-    marginRight = 10,
-    marginTop = 10,
-    marginBottom = 50
+    marginLeft = 20,
+    marginRight = 50,
+    marginTop = 20,
+    marginBottom = 20
   } = props;
 
   const innerHeight: number = height - (marginTop + marginBottom);
-  const market = makeRandomMarket(10);
+  const market = makeRandomMarket(100);
   const marketHigh: number = getHigh(market);
   const marketLow: number = getLow(market);
-  const yScale: () => number = getYScale(
+  const yScale: number => number = getYScale(
     marketLow,
     marketHigh,
-    height - marginBottom
+    innerHeight
   );
-  const xScale: () => number = getXScale(
+  const yScaleInv: number => number = getYScaleInv(
+    marketLow,
+    marketHigh,
+    innerHeight
+  );
+  const xScale: number => number = getXScale(
     market,
     0 + marginLeft,
     width - marginRight,
-    0.05
+    0.3
   );
 
   const renderAxisTicks = () => {
@@ -50,9 +56,6 @@ export const CandleChart = (props: Props) => {
     let axisTicks = [];
 
     for (let i = 0 + marginTop; i <= innerHeight; i = i + inc) {
-      // let classes = classNames({tick : true},
-      // {top : (i === 0)},
-      // {bottom : (i === this.props.height)});
       axisTicks.push(
         <line
           className="ticks"
@@ -63,25 +66,37 @@ export const CandleChart = (props: Props) => {
           key={'tick-' + i}
         />
       );
-      // axisTicks.push(
-      // <text
-      // className="tick-price"
-      // x={this.props.width + 4}
-      // y={i + 4}
-      // key={'tick-price-' + i}>
-      // {this.props.chartType === 'ticks' ? this.props.yScaleInv(i).toFixed(5) : this.props.yScaleInv(i).toFixed(4)}
-      // </text>
-      // );
+      axisTicks.push(
+        <text
+          className="tick-price"
+          x={width - marginRight + 4}
+          y={i + 4}
+          key={'tick-price' + i}
+        >
+          {yScaleInv(i).toFixed(4)}
+        </text>
+      );
     }
-    // console.log('axisTicks: ', axisTicks);
     return axisTicks;
   };
 
-  // console.log('market: ', market);
-  // console.log('market: ', marketHigh);
-  // console.log('market: ', marketLow);
-  // console.log('yScale: ', yScale);
-  // console.log('xScale: ', xScale);
+  const renderCandles = () => {
+    return market.map((candle, inc) => {
+      return (
+        <rect
+          className={'candle'}
+          x={xScale(inc)}
+          y={yScale(Math.max(candle.open, candle.close))}
+          width={xScale.bandwidth()}
+          height={
+            yScale(Math.min(candle.open, candle.close)) -
+            yScale(Math.max(candle.open, candle.close))
+          }
+          key={'candle' + inc}
+        />
+      );
+    });
+  };
 
   return (
     <svg width={width} height={height} className="candle-chart">
@@ -93,6 +108,7 @@ export const CandleChart = (props: Props) => {
         y2={height - marginBottom}
       />
       {renderAxisTicks()}
+      {renderCandles()}
       <line
         className="bottom-axis-line"
         x1={marginLeft}

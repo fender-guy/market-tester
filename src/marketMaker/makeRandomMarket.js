@@ -12,7 +12,7 @@ const round = (number: number, precision: number) => {
 };
 
 const getRandomNumber = (high: number, low: number) =>
-  round((Math.floor(Math.random() * high) - low) * 0.0001, 4);
+  round((Math.floor(Math.random() * high) + low) * 0.0001, 4);
 
 const makeCandle = (previousClose: number) => {
   const open = previousClose;
