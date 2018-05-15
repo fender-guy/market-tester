@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import './candleChart.css';
 import { makeRandomMarket } from '../marketMaker/makeRandomMarket';
 import {
@@ -10,26 +11,34 @@ import {
   getYScaleInv
 } from './chartUtils/marketSpecs';
 
-type Props = {
-  width?: number,
-  height?: number,
-  marginLeft?: number,
-  marginRight?: number,
-  marginTop?: number,
-  marginBottom?: number
-};
+const mapState = state => ({
+  width: state.getIn(['chartSettings', 'width']),
+  height: state.getIn(['chartSettings', 'height']),
+  marginTop: state.getIn(['chartSettings', 'marginTop']),
+  marginRight: state.getIn(['chartSettings', 'marginRight']),
+  marginBottom: state.getIn(['chartSettings', 'marginBottom']),
+  marginLeft: state.getIn(['chartSettings', 'marginLeft']),
+  innerWidth: state.getIn(['chartSettings', 'innerWidth']),
+  innerHeight: state.getIn(['chartSettings', 'innerHeight']),
+  innerLeft: state.getIn(['chartSettings', 'innerLeft']),
+  innerWidth: state.getIn(['chartSettings', 'innerWidth']),
+  innerBottom: state.getIn(['chartSettings', 'innerBottom'])
+});
 
-export const CandleChart = (props: Props) => {
+export const CandleChart = connect(mapState)(props => {
   const {
-    width = 1024,
-    height = 800,
-    marginLeft = 20,
-    marginRight = 50,
-    marginTop = 20,
-    marginBottom = 20
+    width,
+    height,
+    marginLeft,
+    marginRight,
+    marginTop,
+    marginBottom,
+    innerHeight,
+    innerLeft,
+    innerWidth,
+    innerBottom
   } = props;
 
-  const innerHeight: number = height - (marginTop + marginBottom);
   const market = makeRandomMarket(100);
   const marketHigh: number = getHigh(market);
   const marketLow: number = getLow(market);
@@ -45,8 +54,8 @@ export const CandleChart = (props: Props) => {
   );
   const xScale: number => number = getXScale(
     market,
-    0 + marginLeft,
-    width - marginRight,
+    innerLeft,
+    innerWidth,
     0.3
   );
 
@@ -59,8 +68,8 @@ export const CandleChart = (props: Props) => {
       axisTicks.push(
         <line
           className="ticks"
-          x1={0 + marginLeft}
-          x2={width - marginRight}
+          x1={innerLeft}
+          x2={innerWidth}
           y1={i}
           y2={i}
           key={'tick-' + i}
@@ -69,7 +78,7 @@ export const CandleChart = (props: Props) => {
       axisTicks.push(
         <text
           className="tick-price"
-          x={width - marginRight + 4}
+          x={innerWidth + 4}
           y={i + 4}
           key={'tick-price' + i}
         >
@@ -105,17 +114,17 @@ export const CandleChart = (props: Props) => {
         x1={marginLeft}
         x2={marginLeft}
         y1={marginLeft}
-        y2={height - marginBottom}
+        y2={innerBottom}
       />
       {renderAxisTicks()}
       {renderCandles()}
       <line
         className="bottom-axis-line"
         x1={marginLeft}
-        x2={width - marginRight}
-        y1={height - marginBottom}
-        y2={height - marginBottom}
+        x2={innerWidth}
+        y1={innerBottom}
+        y2={innerBottom}
       />
     </svg>
   );
-};
+});
