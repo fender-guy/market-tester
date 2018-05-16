@@ -2,27 +2,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './candleChart.css';
-import { makeRandomMarket } from '../marketMaker/makeRandomMarket';
-import {
-  getHigh,
-  getLow,
-  getYScale,
-  getXScale,
-  getYScaleInv
-} from './chartUtils/marketSpecs';
 
 const mapState = state => ({
   width: state.getIn(['chartSettings', 'width']),
   height: state.getIn(['chartSettings', 'height']),
   marginTop: state.getIn(['chartSettings', 'marginTop']),
-  marginRight: state.getIn(['chartSettings', 'marginRight']),
-  marginBottom: state.getIn(['chartSettings', 'marginBottom']),
   marginLeft: state.getIn(['chartSettings', 'marginLeft']),
   innerWidth: state.getIn(['chartSettings', 'innerWidth']),
   innerHeight: state.getIn(['chartSettings', 'innerHeight']),
   innerLeft: state.getIn(['chartSettings', 'innerLeft']),
-  innerWidth: state.getIn(['chartSettings', 'innerWidth']),
-  innerBottom: state.getIn(['chartSettings', 'innerBottom'])
+  innerBottom: state.getIn(['chartSettings', 'innerBottom']),
+  innerTop: state.getIn(['chartSettings', 'innerTop']),
+  market: state.getIn(['marketInfo', 'market']),
+  marketHigh: state.getIn(['marketHighInfo', 'marketHigh']),
+  marketLow: state.getIn(['marketLowInfo', 'marketLow']),
+  yScale: state.getIn(['yScaleInfo', 'yScale']),
+  yScaleInv: state.getIn(['yScaleInvInfo', 'yScaleInv']),
+  xScale: state.getIn(['xScaleInfo', 'xScale'])
 });
 
 export const CandleChart = connect(mapState)(props => {
@@ -30,41 +26,26 @@ export const CandleChart = connect(mapState)(props => {
     width,
     height,
     marginLeft,
-    marginRight,
     marginTop,
-    marginBottom,
     innerHeight,
     innerLeft,
     innerWidth,
-    innerBottom
-  } = props;
-
-  const market = makeRandomMarket(100);
-  const marketHigh: number = getHigh(market);
-  const marketLow: number = getLow(market);
-  const yScale: number => number = getYScale(
-    marketLow,
-    marketHigh,
-    innerHeight
-  );
-  const yScaleInv: number => number = getYScaleInv(
-    marketLow,
-    marketHigh,
-    innerHeight
-  );
-  const xScale: number => number = getXScale(
+    innerBottom,
+    innerTop,
     market,
-    innerLeft,
-    innerWidth,
-    0.3
-  );
+    marketHigh,
+    marketLow,
+    yScale,
+    yScaleInv,
+    xScale
+  } = props;
 
   const renderAxisTicks = () => {
     const tickNumber: number = 20;
     let inc = innerHeight / tickNumber;
     let axisTicks = [];
 
-    for (let i = 0 + marginTop; i <= innerHeight; i = i + inc) {
+    for (let i = innerTop; i <= innerHeight; i = i + inc) {
       axisTicks.push(
         <line
           className="ticks"
