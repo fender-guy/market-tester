@@ -17,11 +17,12 @@ export const getLow = (market: Market): number =>
 export const getYScale = (
   domainLow: number,
   domainHigh: number,
-  rangeStart: number
+  top: number,
+  bottom: number
 ): (number => number) =>
   scaleLinear()
     .domain([domainLow, domainHigh])
-    .range([rangeStart, 0]);
+    .range([bottom, top]);
 
 export const getXScale = (
   market: Market,
@@ -37,8 +38,9 @@ export const getXScale = (
 export const getYScaleInv = (
   rangeLow: number,
   rangeHigh: number,
-  height: number
+  top: number,
+  bottom: number
 ): (number => number) =>
   scaleLinear()
-    .domain([0, height])
+    .domain([top, bottom])
     .range([rangeHigh, rangeLow]);

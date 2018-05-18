@@ -10,7 +10,7 @@ class App extends Component<Props> {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Market Tester</h1>
+          <h1 className="App-title">Forex Market Generator</h1>
         </header>
         <CandleChart />
       </div>

@@ -19,3 +19,20 @@
   fill: #ccc;
   font-size: 12px;
 }
+
+.candle-wick {
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.candle-wick.up,
+.candle-body.up {
+  stroke: green;
+  fill: green;
+}
+
+.candle-wick.down,
+.candle-body.down {
+  stroke: red;
+  fill: red;
+}

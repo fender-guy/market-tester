@@ -1,13 +1,7 @@
 // @flow
 import { fromJS } from 'immutable';
-import type { ChartSettings } from './types';
-import {
-  getHigh,
-  getLow,
-  getYScale,
-  getXScale,
-  getYScaleInv
-} from './utils/marketSpecs';
+import type { ChartSettings, MarketSettings } from './types';
+import { getHigh, getLow } from './utils/marketSpecs';
 import { makeRandomMarket } from './marketMaker/makeRandomMarket';
 
 const width = 1024;
@@ -24,17 +18,8 @@ const innerLeft = marginLeft;
 const innerRight = innerLeft + innerWidth;
 
 const market = makeRandomMarket(100);
-const marketHigh: number = getHigh(market);
-const marketLow: number = getLow(market);
-
-//TODO: make scale functions in selectors
-const yScale: number => number = getYScale(marketLow, marketHigh, innerHeight);
-const yScaleInv: number => number = getYScaleInv(
-  marketLow,
-  marketHigh,
-  innerHeight
-);
-const xScale: number => number = getXScale(market, innerLeft, innerWidth, 0.3);
+const marketHigh = getHigh(market);
+const marketLow = getLow(market);
 
 const chartSettings: ChartSettings = {
   width,
@@ -51,12 +36,10 @@ const chartSettings: ChartSettings = {
   innerRight
 };
 
-const marketInfo = {
+const marketInfo: MarketSettings = {
   market,
   marketHigh,
-  marketLow,
-  yScale,
-  yScaleInv
+  marketLow
 };
 
 export default fromJS({

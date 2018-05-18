@@ -2,42 +2,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './candleChart.css';
+import { makeYScaleInvSelector } from '../ducks/marketInfo';
+import { Candles } from './Candle';
 
-const mapState = state => ({
-  width: state.getIn(['chartSettings', 'width']),
-  height: state.getIn(['chartSettings', 'height']),
-  marginTop: state.getIn(['chartSettings', 'marginTop']),
-  marginLeft: state.getIn(['chartSettings', 'marginLeft']),
-  innerWidth: state.getIn(['chartSettings', 'innerWidth']),
-  innerHeight: state.getIn(['chartSettings', 'innerHeight']),
-  innerLeft: state.getIn(['chartSettings', 'innerLeft']),
-  innerBottom: state.getIn(['chartSettings', 'innerBottom']),
-  innerTop: state.getIn(['chartSettings', 'innerTop']),
-  market: state.getIn(['marketInfo', 'market']),
-  marketHigh: state.getIn(['marketHighInfo', 'marketHigh']),
-  marketLow: state.getIn(['marketLowInfo', 'marketLow']),
-  yScale: state.getIn(['yScaleInfo', 'yScale']),
-  yScaleInv: state.getIn(['yScaleInvInfo', 'yScaleInv']),
-  xScale: state.getIn(['xScaleInfo', 'xScale'])
-});
+const mapState = state => {
+  const yScaleInvSelector = makeYScaleInvSelector();
+
+  return {
+    width: state.getIn(['chartSettings', 'width']),
+    height: state.getIn(['chartSettings', 'height']),
+    marginLeft: state.getIn(['chartSettings', 'marginLeft']),
+    innerWidth: state.getIn(['chartSettings', 'innerWidth']),
+    innerHeight: state.getIn(['chartSettings', 'innerHeight']),
+    innerLeft: state.getIn(['chartSettings', 'innerLeft']),
+    innerBottom: state.getIn(['chartSettings', 'innerBottom']),
+    innerTop: state.getIn(['chartSettings', 'innerTop']),
+    yScaleInv: yScaleInvSelector(state)
+  };
+};
 
 export const CandleChart = connect(mapState)(props => {
   const {
     width,
     height,
     marginLeft,
-    marginTop,
     innerHeight,
     innerLeft,
     innerWidth,
     innerBottom,
     innerTop,
-    market,
-    marketHigh,
-    marketLow,
-    yScale,
-    yScaleInv,
-    xScale
+    yScaleInv
   } = props;
 
   const renderAxisTicks = () => {
@@ -70,24 +64,6 @@ export const CandleChart = connect(mapState)(props => {
     return axisTicks;
   };
 
-  const renderCandles = () => {
-    return market.map((candle, inc) => {
-      return (
-        <rect
-          className={'candle'}
-          x={xScale(inc)}
-          y={yScale(Math.max(candle.open, candle.close))}
-          width={xScale.bandwidth()}
-          height={
-            yScale(Math.min(candle.open, candle.close)) -
-            yScale(Math.max(candle.open, candle.close))
-          }
-          key={'candle' + inc}
-        />
-      );
-    });
-  };
-
   return (
     <svg width={width} height={height} className="candle-chart">
       <line
@@ -98,7 +74,7 @@ export const CandleChart = connect(mapState)(props => {
         y2={innerBottom}
       />
       {renderAxisTicks()}
-      {renderCandles()}
+      <Candles />
       <line
         className="bottom-axis-line"
         x1={marginLeft}
