@@ -4,8 +4,8 @@ import type { ChartSettings, MarketSettings } from './types';
 import { getHigh, getLow } from './utils/marketSpecs';
 import { makeRandomMarket } from './marketMaker/makeRandomMarket';
 
-const width = 1024;
-const height = 800;
+const width = 924;
+const height = 700;
 const marginLeft = 20;
 const marginRight = 50;
 const marginTop = 20;

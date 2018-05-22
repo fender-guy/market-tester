@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { CandleChart } from './charts/CandleChart';
+import { TopMenuBar } from './topMenuBar';
 
 type Props = {};
 
@@ -12,7 +13,10 @@ class App extends Component<Props> {
         <header className="App-header">
           <h1 className="App-title">Forex Market Generator</h1>
         </header>
-        <CandleChart />
+        <div className="app-container">
+          <TopMenuBar />
+          <CandleChart />
+        </div>
       </div>
     );
   }

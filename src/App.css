@@ -9,8 +9,8 @@
 
 .App-header {
   background-color: #222;
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 10px;
+  margin-bottom: 10px;
   color: white;
 }
 
@@ -22,11 +22,12 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.app-container svg {
+  display: block;
+  clear: both;
+}
+
+.app-container {
+  width: 924px;
+  margin: 0 auto;
 }

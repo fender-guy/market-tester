@@ -12,6 +12,7 @@
     "husky": "^0.14.3",
     "immutable": "^3.8.2",
     "lint-staged": "^7.0.0",
+    "normalize.css": "^8.0.0",
     "prettier": "^1.11.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

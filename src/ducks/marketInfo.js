@@ -1,15 +1,30 @@
 import Immutable from 'immutable';
 import { createSelector } from 'reselect';
 import { getYScale, getXScale, getYScaleInv } from '../utils/marketSpecs';
+import { makeRandomMarket } from '../marketMaker/makeRandomMarket';
+import { getHigh, getLow } from '../utils/marketSpecs';
+
+const GENERATENEWMARKET = 'market-maker/marketInfo/GENERATENEW';
 
 export default (state = Immutable.fromJS({}), action) => {
-  const { type } = action;
+  const { type, candleNums } = action;
 
   switch (type) {
+    case GENERATENEWMARKET:
+      const newMarket = makeRandomMarket(candleNums);
+      state = state.set('market', Immutable.fromJS(newMarket));
+      state = state.set('marketHigh', getHigh(newMarket));
+      state = state.set('marketLow', getLow(newMarket));
+      return state;
     default:
       return state;
   }
 };
+
+export const generateNewMarket = (num = 100) => ({
+  type: GENERATENEWMARKET,
+  candleNums: num
+});
 
 const getMarketLow = state => state.getIn(['marketInfo', 'marketLow']);
 const getMarketHigh = state => state.getIn(['marketInfo', 'marketHigh']);

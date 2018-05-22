@@ -1,0 +1,9 @@
+.top-menu-bar {
+  padding: 10px 0px;
+  overflow: auto;
+}
+
+.top-menu-bar .new-market-button {
+  float: left;
+  display: block;
+}
