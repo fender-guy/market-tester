@@ -1,12 +1,12 @@
 // @flow
 import React, { Component } from 'react';
 import './App.css';
-import { CandleChart } from './charts/CandleChart';
-import { TopMenuBar } from './topMenuBar';
+import CandleChart from './charts/CandleChart';
+import TopMenuBar from './topMenuBar';
 
 type Props = {};
 
-class App extends Component<Props> {
+export class App extends Component<Props> {
   render() {
     return (
       <div className="App">

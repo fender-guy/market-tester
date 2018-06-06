@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { generateNewMarket } from '../ducks/marketInfo';
 
-export const TopMenuBar = connect(() => ({}), { generateNewMarket })(props => {
+export const TopMenuBar = props => {
   const clickHandler = () => {
     props.generateNewMarket(100);
   };
@@ -14,4 +14,6 @@ export const TopMenuBar = connect(() => ({}), { generateNewMarket })(props => {
       </button>
     </div>
   );
-});
+};
+
+export default connect(() => ({}), { generateNewMarket })(TopMenuBar);

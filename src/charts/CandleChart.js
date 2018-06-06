@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import './candleChart.css';
 import { makeYScaleInvSelector } from '../ducks/marketInfo';
 import { Candles } from './Candle';
+import type { CandleChartTypes } from '../types';
 
 const mapState = state => {
   const yScaleInvSelector = makeYScaleInvSelector();
@@ -21,7 +22,7 @@ const mapState = state => {
   };
 };
 
-export const CandleChart = connect(mapState)(props => {
+export const CandleChart = (props: CandleChartTypes) => {
   const {
     width,
     height,
@@ -34,12 +35,16 @@ export const CandleChart = connect(mapState)(props => {
     yScaleInv
   } = props;
 
+  if (!innerHeight) {
+    return null;
+  }
+
   const renderAxisTicks = () => {
     const tickNumber: number = 20;
     let inc = innerHeight / tickNumber;
     let axisTicks = [];
 
-    for (let i = innerTop; i <= innerHeight; i = i + inc) {
+    for (let i: number = innerTop; i <= innerHeight; i = i + inc) {
       axisTicks.push(
         <line
           className="ticks"
@@ -84,4 +89,6 @@ export const CandleChart = connect(mapState)(props => {
       />
     </svg>
   );
-});
+};
+
+export default connect(mapState)(CandleChart);

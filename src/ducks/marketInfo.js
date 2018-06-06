@@ -11,6 +11,8 @@ export default (state = Immutable.fromJS({}), action) => {
 
   switch (type) {
     case GENERATENEWMARKET:
+      // Is a black box.
+      // If the market maker is passed in then it's easier to test.
       const newMarket = makeRandomMarket(candleNums);
       state = state.set('market', Immutable.fromJS(newMarket));
       state = state.set('marketHigh', getHigh(newMarket));

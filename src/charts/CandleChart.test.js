@@ -1,53 +1,69 @@
 import ReactDOM from 'react-dom';
-import { CandleChart } from './CandleChart';
 import React from 'react';
-import { mount } from 'enzyme';
-
-const props = {
-  width: 1024,
-  height: 800,
-  marginLeft: 10,
-  marginRight: 10,
-  marginTop: 10,
-  marginBottom: 50
-};
+import { mount, shallow } from 'enzyme';
+import { Provider } from 'react-redux';
+import CandleChart from './CandleChart';
+import { store } from '../store';
+import { mockStore } from '../defaultState';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<CandleChart />, div);
-});
-
-it('renderes an svg with specified width and height', () => {
-  const wrapper = mount(<CandleChart {...props} />);
-  const chart = wrapper.render();
-  expect(chart[0].attribs.width).toEqual(props.width.toString());
-  expect(chart[0].attribs.height).toEqual(props.height.toString());
-});
-
-it('renders a left axis with proper dimensions', () => {
-  const wrapper = mount(<CandleChart {...props} />);
-  const chart = wrapper.render();
-  const line = chart[0].children[0];
-  expect(line.attribs.class).toEqual('left-axis-line');
-  expect(line.attribs.x1).toEqual(props.marginLeft.toString());
-  expect(line.attribs.x2).toEqual(props.marginLeft.toString());
-  expect(line.attribs.y1).toEqual(props.marginLeft.toString());
-  expect(line.attribs.y2).toEqual(
-    (props.height - props.marginBottom).toString()
+  ReactDOM.render(
+    <Provider store={store}>
+      <CandleChart />
+    </Provider>,
+    div
   );
 });
 
-it('renders a right axis with proper dimensions', () => {
-  const wrapper = mount(<CandleChart {...props} />);
+describe('chart settings', () => {
+  const wrapper = mount(
+    <Provider store={store}>
+      <CandleChart />
+    </Provider>
+  );
   const chart = wrapper.render();
-  const line = chart[0].children[1];
-  expect(line.attribs.class).toEqual('bottom-axis-line');
-  expect(line.attribs.x1).toEqual(props.marginLeft.toString());
-  expect(line.attribs.x2).toEqual((props.width - props.marginRight).toString());
-  expect(line.attribs.y1).toEqual(
-    (props.height - props.marginBottom).toString()
-  );
-  expect(line.attribs.y2).toEqual(
-    (props.height - props.marginBottom).toString()
-  );
+
+  test('renderes an svg with specified width and height', () => {
+    expect(chart[0].attribs.width).toEqual(
+      mockStore.chartSettings.width.toString()
+    );
+    expect(chart[0].attribs.height).toEqual(
+      mockStore.chartSettings.height.toString()
+    );
+  });
+
+  test('renders a left axis with proper dimensions', () => {
+    const line = chart.find('.left-axis-line')[0];
+    expect(line.attribs.class).toEqual('left-axis-line');
+    expect(line.attribs.x1).toEqual(
+      mockStore.chartSettings.innerLeft.toString()
+    );
+    expect(line.attribs.x2).toEqual(
+      mockStore.chartSettings.innerLeft.toString()
+    );
+    expect(line.attribs.y1).toEqual(
+      mockStore.chartSettings.innerTop.toString()
+    );
+    expect(line.attribs.y2).toEqual(
+      mockStore.chartSettings.innerBottom.toString()
+    );
+  });
+
+  test('renders a bottom axis with proper dimensions', () => {
+    const line = chart.find('.bottom-axis-line')[0];
+    expect(line.attribs.class).toEqual('bottom-axis-line');
+    expect(line.attribs.x1).toEqual(
+      mockStore.chartSettings.innerLeft.toString()
+    );
+    expect(line.attribs.x2).toEqual(
+      mockStore.chartSettings.innerWidth.toString()
+    );
+    expect(line.attribs.y1).toEqual(
+      mockStore.chartSettings.innerBottom.toString()
+    );
+    expect(line.attribs.y2).toEqual(
+      mockStore.chartSettings.innerBottom.toString()
+    );
+  });
 });

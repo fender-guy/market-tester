@@ -46,3 +46,8 @@ export default fromJS({
   chartSettings,
   marketInfo
 });
+
+export const mockStore = {
+  chartSettings,
+  marketInfo
+};
